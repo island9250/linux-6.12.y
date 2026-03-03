@@ -8,7 +8,11 @@
 
 /dts-v1/;
 
-#include "meson-g12b-a311d-oes.dts"
+#include "meson-g12b-s922x-oes-plus-a.dts"
+
+/ {
+	model = "OneThing Cloud OES Plus (Model B)";
+};
 
 &ethmac {
 	phy-mode = "rgmii-rxid";
