@@ -1350,15 +1350,13 @@
 			status = "disabled";
 		};
 
-		otp: nvmem@ffce0000 {
+		otp: efuse@ffce0000 {
 			compatible = "rockchip,rk3528-otp";
 			reg = <0x0 0xffce0000 0x0 0x4000>;
-			clocks = <&cru CLK_USER_OTPC_NS>,
-				 <&cru PCLK_OTPC_NS>,
+			clocks = <&cru CLK_USER_OTPC_NS>, <&cru PCLK_OTPC_NS>,
 				 <&cru CLK_SBPI_OTPC_NS>;
 			clock-names = "otp", "apb_pclk", "sbpi";
-			resets = <&cru SRST_USER_OTPC_NS>,
-				 <&cru SRST_P_OTPC_NS>,
+			resets = <&cru SRST_USER_OTPC_NS>, <&cru SRST_P_OTPC_NS>,
 				 <&cru SRST_SBPI_OTPC_NS>;
 			reset-names = "otp", "apb", "sbpi";
 
