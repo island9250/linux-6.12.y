@@ -222,10 +222,16 @@
 };
 
 &gmac1 {
+	/* Please Fix me:
+	 * When snps,tso exists,
+	 * it may cause the netdev watchdog to time out
+	 */
+	/delete-property/ snps,tso;
+
 	clock_in_out = "output";
 	label = "eth0";
 	phy-handle = <&rgmii_phy>;
-	phy-mode = "rgmii-id";
+	phy-mode = "rgmii";
 	phy-supply = <&vcc_3v3>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&rgmii_miim>, <&rgmii_tx_bus2>, <&rgmii_rx_bus2>,
