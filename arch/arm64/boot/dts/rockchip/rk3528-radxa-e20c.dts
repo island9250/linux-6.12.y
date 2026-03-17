@@ -63,6 +63,7 @@
 		led-lan {
 			color = <LED_COLOR_ID_GREEN>;
 			default-state = "off";
+			label = "green:lan";
 			function = LED_FUNCTION_LAN;
 			gpios = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
 			linux,default-trigger = "netdev";
@@ -71,6 +72,7 @@
 		led-sys {
 			color = <LED_COLOR_ID_GREEN>;
 			default-state = "on";
+			label = "green:sys";
 			function = LED_FUNCTION_HEARTBEAT;
 			gpios = <&gpio4 RK_PC1 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "heartbeat";
@@ -79,6 +81,7 @@
 		led-wan {
 			color = <LED_COLOR_ID_GREEN>;
 			default-state = "off";
+			label = "green:wan";
 			function = LED_FUNCTION_WAN;
 			gpios = <&gpio4 RK_PC0 GPIO_ACTIVE_HIGH>;
 			linux,default-trigger = "netdev";
@@ -226,15 +229,10 @@
 	phy-supply = <&vcc_3v3>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&rgmii_miim>, <&rgmii_tx_bus2>, <&rgmii_rx_bus2>,
-		    <&rgmii_rgmii_clk>, <&rgmii_rgmii_bus>, <&gmac1_rstn_l>;
+		    <&rgmii_rgmii_clk>, <&rgmii_rgmii_bus>;
 
 	tx_delay = <0x2e>;
 	rx_delay = <0x16>;
-
-	snps,reset-gpio = <&gpio4 RK_PC2 GPIO_ACTIVE_LOW>;
-	snps,reset-active-low;
-	/* Reset time is 20ms, 100ms for yt8531 */
-	snps,reset-delays-us = <0 20000 100000>;
 
 	status = "okay";
 };
@@ -286,14 +284,21 @@
 };
 
 &mdio1 {
-	/* Motorcomm YT8531 (Rockchip RK631) */
 	rgmii_phy: ethernet-phy@1 {
-		compatible = "ethernet-phy-ieee802.3-c22";
+		/* Motorcomm YT8531 (Rockchip RK631) */
+		compatible = "ethernet-phy-id4f51.e91b";
 		reg = <0x1>;
 
-		motorcomm,yt8531-led0-cfg = <0x0000>;  /* LED0: Disabled */
-		motorcomm,yt8531-led1-cfg = <0x2600>;  /* LED1(G): Activity */
-		motorcomm,yt8531-led2-cfg = <0x0070>;  /* LED2(Y): Link - 10/100/1000M */
+		/* LED1(G): Activity */
+		motorcomm,led1-triggers = "activity";
+		/* LED2(Y): Link - 10/100/1000M */
+		motorcomm,led2-triggers = "link-10", "link-100", "link-1000";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&gmac1_rstn_l>;
+		reset-assert-us = <20000>;
+		reset-deassert-us = <100000>;
+		reset-gpios = <&gpio4 RK_PC2 GPIO_ACTIVE_LOW>;
 	};
 };
 
@@ -396,8 +401,6 @@
 	no-sd;
 	no-sdio;
 	non-removable;
-	//mmc-hs400-1_8v;
-	//mmc-hs400-enhanced-strobe;
 	vmmc-supply = <&vcc_3v3>;
 	vqmmc-supply = <&vcc_1v8>;
 	status = "okay";
