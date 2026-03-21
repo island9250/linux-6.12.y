@@ -672,7 +672,7 @@
 };
 
 &tcphy1 {
-	status = "disabled";
+	status = "okay";
 };
 
 &tsadc {
