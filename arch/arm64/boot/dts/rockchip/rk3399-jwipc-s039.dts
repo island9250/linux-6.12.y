@@ -33,8 +33,6 @@
 	dc_12v: dc-12v {
 		compatible = "regulator-fixed";
 		regulator-name = "dc_12v";
-		regulator-always-on;
-		regulator-boot-on;
 		regulator-min-microvolt = <12000000>;
 		regulator-max-microvolt = <12000000>;
 	};
@@ -93,11 +91,9 @@
 		enable-active-high;
 		gpio = <&gpio4 RK_PD2 GPIO_ACTIVE_HIGH>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&vcc5v0_host_en>;
+		pinctrl-0 = <&vcc5v0_host_en &usbhub_rst>;
 		regulator-name = "vcc5v0_host";
 		regulator-always-on;
-		regulator-min-microvolt = <5000000>;
-		regulator-max-microvolt = <5000000>;
 		vin-supply = <&vcc5v0_io>;
 	};
 
@@ -239,9 +235,8 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&rgmii_pins>;
 	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_HIGH>;
-	snps,reset-active-low;
 	snps,reset-delays-us = <0 10000 50000>;
-	tx_delay = <0x9>;
+	tx_delay = <0x13>;
 	rx_delay = <0x19>;
 	status = "okay";
 };
@@ -727,8 +722,6 @@
 
 &usb_host0_ehci {
 	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&usbhub_rst>;
 };
 
 &usb_host0_ohci {
